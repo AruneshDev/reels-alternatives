@@ -4,7 +4,7 @@ import ActivityList from '../components/ActivityList';
 const HomePage = () => {
   return (
     <div>
-      <h1>10 Things to Do Instead of Watching Reels</h1>
+      <h1>Welcome to the Activities App</h1>
       <ActivityList />
     </div>
   );

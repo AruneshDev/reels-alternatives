@@ -1,28 +1,16 @@
 const express = require('express');
-const Activity = require('../models/Activity');
 const router = express.Router();
 
-// Get all activities
-router.get('/', async (req, res) => {
-  try {
-    const activities = await Activity.find();
-    res.json(activities);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-});
+// Mock data
+const activities = [
+  { id: 1, name: 'Go for a walk', type: 'outdoor' },
+  { id: 2, name: 'Read a book', type: 'indoor' },
+  { id: 3, name: 'Play a sport', type: 'outdoor' },
+];
 
-// Add a new activity
-router.post('/', async (req, res) => {
-  const { title, description, category, imageUrl } = req.body;
-  const activity = new Activity({ title, description, category, imageUrl });
-
-  try {
-    const newActivity = await activity.save();
-    res.status(201).json(newActivity);
-  } catch (err) {
-    res.status(400).json({ message: err.message });
-  }
+// GET /api/activities
+router.get('/', (req, res) => {
+  res.status(200).json(activities);
 });
 
 module.exports = router;
