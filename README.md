@@ -178,5 +178,5 @@ This project is licensed under the MIT License. See the LICENSE file for details
 
 For questions or suggestions, contact:
 - **ARUNESH LAL**
-- GitHub: [https://github.com/your-username](https://github.com/AruneshDev)
+- GitHub: [https://github.com/AruneshDev](https://github.com/AruneshDev)
 
