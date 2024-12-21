@@ -4,6 +4,7 @@ import LoginPage from "./pages/LoginPage";
 import HomePage from "./pages/HomePage";
 import GoalsPage from "./pages/GoalsPage";
 import JournalPage from "./pages/JournalPage";
+import DeepWorkPage from "./pages/DeepWorkPage";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Route path="/home" element={<HomePage />} />
         <Route path="/goals" element={<GoalsPage />} />
         <Route path="/journal" element={<JournalPage />} />
+        <Route path="/deep-work" element={<DeepWorkPage />} />
       </Routes>
     </Router>
   );

@@ -3,6 +3,7 @@ const cors = require('cors');
 const path = require('path');
 const activityRoutes = require('./routes/activityRoutes');
 const journalRoutes = require('./routes/JournalRoutes');
+const deepWorkRoutes = require('./routes/DeepworkRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 5001;
@@ -22,7 +23,10 @@ app.use('/api/activities', activityRoutes);
 // Use journal routes
 app.use('/api/journal', journalRoutes);
 
+app.use('/api/deep-work', deepWorkRoutes);
+
 // Start the server
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
+

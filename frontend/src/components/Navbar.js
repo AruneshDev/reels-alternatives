@@ -48,6 +48,17 @@ const Navbar = () => {
           Journal
         </Link>
         <Link
+  to="/deep-work"
+  style={{
+    margin: "0 10px",
+    textDecoration: "none",
+    color: "white",
+  }}
+>
+  Deep Work
+</Link>
+
+        <Link
           to="/"
           style={{
             margin: "0 10px",
@@ -58,6 +69,7 @@ const Navbar = () => {
             console.log("Logging out");
             // Add signOut logic here if required
           }}
+          
         >
           Logout
         </Link>
