@@ -8,7 +8,7 @@ const HomePage = () => {
   useEffect(() => {
     const fetchActivities = async () => {
       try {
-        const response = await axios.get("http://localhost:5001/api/activities"); // Fetch activities from backend
+        const response = await axios.get("http://localhost:5001/api/activities"); // Replace with your backend URL
         const updatedActivities = response.data.map((activity) => ({
           ...activity,
           image: `http://localhost:5001/${activity.image}`, // Prepend backend URL to images
@@ -26,7 +26,7 @@ const HomePage = () => {
     <div>
       <Navbar />
       <div style={{ textAlign: "center", marginTop: "50px" }}>
-        <h1>Welcome to the Activity Page</h1>
+        <h1>Explore Activities</h1>
         <div
           style={{
             display: "grid",

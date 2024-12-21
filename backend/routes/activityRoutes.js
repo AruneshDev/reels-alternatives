@@ -73,6 +73,14 @@ const activities = [
     image: "backend/photos/volunteer.jpg",
     link: "https://www.volunteermatch.org/",
   },
+  {
+    id: 11, // New activity
+    name: "Read Interesting Articles",
+    type: "indoor",
+    image: "backend/photos/news.jpg", // Add the image in your backend photos folder
+    link: "https://news.google.com/", // Example link for articles
+  },
+
 ];
 
 // Route to get all activities
