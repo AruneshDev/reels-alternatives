@@ -1,0 +1,23 @@
+/* Navbar.css */
+nav {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 20px;
+    background-color: #282c34;
+    color: white;
+  }
+  
+  nav h1 {
+    font-size: 24px;
+  }
+  
+  nav a {
+    margin: 0 10px;
+    text-decoration: none;
+    color: white;
+  }
+  
+  nav a:hover {
+    text-decoration: underline;
+  }
+  
