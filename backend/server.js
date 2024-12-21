@@ -2,18 +2,18 @@ const express = require('express');
 const activityRoutes = require('./routes/activityRoutes');
 const cors = require('cors');
 const dotenv = require('dotenv');
+const path = require('path');
 
 dotenv.config();
 
-const app = express();
+const app = express(); // Initialize 'app' here
 
+// Middleware
 app.use(cors());
 app.use(express.json());
 
-// Root route
-app.get('/', (req, res) => {
-  res.send('Welcome to the Backend!');
-});
+// Serve static files from the "photos" folder
+app.use('/backend/photos', express.static(path.join(__dirname, 'photos')));
 
 // Register API routes
 app.use('/api/activities', activityRoutes);

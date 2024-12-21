@@ -1,0 +1,71 @@
+.activity-container {
+    display: flex; /* Use Flexbox for alignment */
+    justify-content: space-evenly; /* Space cards evenly */
+    align-items: center; /* Vertically center cards */
+    height: 100vh; /* Full height of the viewport */
+    margin: 0; /* Remove extra margin */
+    padding: 0; /* Remove extra padding */
+    box-sizing: border-box; /* Ensure padding and borders are included in the width/height */
+  }
+  
+  .activity-card {
+    flex: 0 0 40%; /* Each card takes 40% of the container width */
+    max-width: 500px; /* Limit maximum width for large screens */
+    height: 70%; /* Set the card height */
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.2s, border-color 0.2s;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-sizing: border-box;
+    padding: 10px;
+  }
+  
+  .activity-card img {
+    width: 100%; /* Image takes full width of the card */
+    height: 80%; /* Ensure the image fills most of the card */
+    object-fit: contain; /* Keep the full image visible */
+    border-radius: 8px;
+  }
+  
+  .activity-card h3 {
+    margin: 10px 0;
+    font-size: 1.2rem;
+  }
+  
+  .activity-card a {
+    color: blue;
+    text-decoration: underline;
+    font-size: 1rem;
+  }
+  
+  .activity-card:hover {
+    transform: scale(1.05);
+    border-color: #888;
+  }
+  
+  .activity-card.selected {
+    border-color: green;
+    background-color: #e7ffe7;
+  }
+  @media (max-width: 768px) {
+    .activity-container {
+      flex-direction: column; /* Stack cards vertically */
+      height: auto; /* Adjust height dynamically */
+      padding: 20px; /* Add some padding for spacing */
+    }
+  
+    .activity-card {
+      flex: 0 0 80%; /* Each card takes up 80% of the container width */
+      margin-bottom: 20px; /* Add spacing between cards */
+      height: auto; /* Allow height to adjust dynamically */
+    }
+  
+    .activity-card img {
+      height: auto; /* Let images scale dynamically */
+    }
+  }
+  
