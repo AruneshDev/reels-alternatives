@@ -1,43 +1,46 @@
 const express = require('express');
 const router = express.Router();
+const mongoose = require('mongoose');
 
-let journalEntries = []; // In-memory storage for demo. Use a database in production.
-
-// Save a journal entry
-router.post('/save', (req, res) => {
-  const { title, content } = req.body;
-
-  if (!title || !content) {
-    return res.status(400).json({ message: 'Title and content are required' });
-  }
-
-  const entry = {
-    id: journalEntries.length + 1,
-    title,
-    content,
-    date: new Date().toISOString(),
-  };
-
-  journalEntries.push(entry);
-  res.status(201).json({ message: 'Journal entry saved', entry });
+// Journal schema
+const journalSchema = new mongoose.Schema({
+  title: { type: String, required: true },
+  content: { type: String, required: true },
+  date: { type: Date, default: Date.now },
 });
+
+const Journal = mongoose.model('Journal', journalSchema);
 
 // Get all journal entries
-router.get('/', (req, res) => {
-  res.status(200).json(journalEntries);
+router.get('/', async (req, res) => {
+  try {
+    const entries = await Journal.find();
+    res.json(entries);
+  } catch (error) {
+    res.status(500).send({ error: 'Failed to fetch journal entries.' });
+  }
 });
 
-// Delete a journal entry by ID
-router.delete('/:id', (req, res) => {
-  const { id } = req.params;
-  const entryIndex = journalEntries.findIndex((entry) => entry.id === parseInt(id));
-
-  if (entryIndex === -1) {
-    return res.status(404).json({ message: 'Journal entry not found' });
+// Add a new journal entry
+router.post('/', async (req, res) => {
+  try {
+    const { title, content } = req.body;
+    const entry = new Journal({ title, content });
+    await entry.save();
+    res.status(201).json(entry);
+  } catch (error) {
+    res.status(400).send({ error: 'Failed to save journal entry.' });
   }
+});
 
-  journalEntries.splice(entryIndex, 1);
-  res.status(200).json({ message: 'Journal entry deleted successfully' });
+// Delete a journal entry
+router.delete('/:id', async (req, res) => {
+  try {
+    await Journal.findByIdAndDelete(req.params.id);
+    res.status(204).send();
+  } catch (error) {
+    res.status(500).send({ error: 'Failed to delete journal entry.' });
+  }
 });
 
 module.exports = router;

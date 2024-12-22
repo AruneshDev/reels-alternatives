@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
-import Navbar from "../components/Navbar";
 import axios from "axios";
-import "./JournalPage.css"; // Optional CSS for better styling
+import Navbar from "../components/Navbar";
+import { Editor } from "@tinymce/tinymce-react"; // Import TinyMCE editor
 
 const JournalPage = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [entries, setEntries] = useState([]);
 
-  // Fetch all journal entries on page load
+  // Fetch journal entries from backend
   useEffect(() => {
     const fetchEntries = async () => {
       try {
@@ -16,136 +16,158 @@ const JournalPage = () => {
         setEntries(response.data);
       } catch (error) {
         console.error("Error fetching journal entries:", error);
+        alert("Failed to fetch journal entries. Please try again.");
       }
     };
 
     fetchEntries();
   }, []);
 
-  // Handle form submission to save a journal entry
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
+  // Save a new journal entry
+  const handleSaveEntry = async () => {
     if (!title || !content) {
-      alert("Both title and content are required");
+      alert("Please fill in both the title and content.");
       return;
     }
 
     try {
-      const response = await axios.post("http://localhost:5001/api/journal/save", {
+      const response = await axios.post("http://localhost:5001/api/journal", {
         title,
         content,
       });
-      setEntries((prevEntries) => [response.data.entry, ...prevEntries]);
+      setEntries([...entries, response.data]);
       setTitle("");
       setContent("");
     } catch (error) {
       console.error("Error saving journal entry:", error);
+      alert("Failed to save entry. Please try again.");
     }
   };
 
-  // Handle delete entry
-  const handleDelete = async (id) => {
+  // Delete a journal entry
+  const handleDeleteEntry = async (id) => {
     try {
-      const response = await axios.delete(`http://localhost:5001/api/journal/${id}`);
-      alert(response.data.message);
-      setEntries((prevEntries) => prevEntries.filter((entry) => entry.id !== id));
+      await axios.delete(`http://localhost:5001/api/journal/${id}`);
+      setEntries(entries.filter((entry) => entry._id !== id));
     } catch (error) {
       console.error("Error deleting journal entry:", error);
-      alert("Failed to delete the journal entry. Please try again.");
+      alert("Failed to delete entry. Please try again.");
     }
   };
 
   return (
     <div>
       <Navbar />
-      <div style={{ textAlign: "center", marginTop: "50px" }}>
-        <h1>My Journal</h1>
-        <form onSubmit={handleSubmit} style={{ marginBottom: "30px" }}>
-          <input
-            type="text"
-            placeholder="Title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
+      <div style={{ padding: "20px", fontFamily: "Arial, sans-serif" }}>
+        <h1 style={{ textAlign: "center" }}>Journal</h1>
+
+        {/* Input for Title */}
+        <div style={{ marginBottom: "20px" }}>
+          <label
             style={{
               display: "block",
-              margin: "10px auto",
+              marginBottom: "5px",
+              fontWeight: "bold",
+            }}
+          >
+            Title
+          </label>
+          <input
+            type="text"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="Enter title"
+            style={{
+              width: "100%",
               padding: "10px",
-              width: "80%",
-              maxWidth: "500px",
               borderRadius: "5px",
               border: "1px solid #ccc",
             }}
           />
-          <textarea
-            placeholder="Write your thoughts here..."
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
+        </div>
+
+        {/* Editor for Content */}
+        <div style={{ marginBottom: "20px" }}>
+          <label
             style={{
               display: "block",
-              margin: "10px auto",
-              padding: "10px",
-              width: "80%",
-              maxWidth: "500px",
-              height: "150px",
-              borderRadius: "5px",
-              border: "1px solid #ccc",
-            }}
-          ></textarea>
-          <button
-            type="submit"
-            style={{
-              padding: "10px 20px",
-              backgroundColor: "#4285F4",
-              color: "white",
-              border: "none",
-              borderRadius: "5px",
-              fontSize: "16px",
-              cursor: "pointer",
+              marginBottom: "5px",
+              fontWeight: "bold",
             }}
           >
-            Save
-          </button>
-        </form>
+            Note
+          </label>
+          <Editor
+          apiKey={process.env.REACT_APP_TINYMCE_API_KEY} // Replace with your TinyMCE API key
+            value={content}
+            init={{
+              height: 300,
+              menubar: false,
+              plugins: [
+                "advlist autolink lists link image charmap print preview anchor",
+                "searchreplace visualblocks code fullscreen",
+                "insertdatetime media table paste code help wordcount",
+              ],
+              toolbar:
+                "undo redo | formatselect | bold italic backcolor | \
+                alignleft aligncenter alignright alignjustify | \
+                bullist numlist outdent indent | removeformat | help",
+            }}
+            onEditorChange={(content) => setContent(content)}
+          />
+        </div>
 
-        <h2>Saved Entries</h2>
-        <div>
-          {entries.map((entry) => (
-            <div
-              key={entry.id}
-              style={{
-                border: "1px solid #ddd",
-                borderRadius: "8px",
-                padding: "20px",
-                margin: "10px auto",
-                width: "80%",
-                maxWidth: "500px",
-                textAlign: "left",
-              }}
-            >
-              <h3>{entry.title}</h3>
-              <p>{entry.content}</p>
-              <small style={{ display: "block", marginBottom: "10px" }}>
-                {new Date(entry.date).toLocaleString()}
-              </small>
-              <div style={{ textAlign: "center" }}>
+        {/* Save Button */}
+        <button
+          onClick={handleSaveEntry}
+          style={{
+            padding: "10px 20px",
+            backgroundColor: "green",
+            color: "white",
+            border: "none",
+            borderRadius: "5px",
+            cursor: "pointer",
+          }}
+        >
+          Save
+        </button>
+
+        {/* List of Saved Entries */}
+        <div style={{ marginTop: "40px" }}>
+          <h2>Previous Entries</h2>
+          {entries.length > 0 ? (
+            entries.map((entry) => (
+              <div
+                key={entry._id}
+                style={{
+                  border: "1px solid #ddd",
+                  borderRadius: "8px",
+                  padding: "15px",
+                  marginBottom: "10px",
+                }}
+              >
+                <h3>{entry.title}</h3>
+                <div
+                  dangerouslySetInnerHTML={{ __html: entry.content }}
+                  style={{ marginBottom: "10px" }}
+                />
                 <button
-                  onClick={() => handleDelete(entry.id)}
+                  onClick={() => handleDeleteEntry(entry._id)}
                   style={{
-                    padding: "10px 20px",
-                    backgroundColor: "#FF4C4C",
+                    padding: "5px 10px",
+                    backgroundColor: "red",
                     color: "white",
                     border: "none",
                     borderRadius: "5px",
-                    marginTop: "10px",
-                    cursor: "pointer",
                   }}
                 >
                   Delete
                 </button>
               </div>
-            </div>
-          ))}
+            ))
+          ) : (
+            <p>No journal entries yet. Start by adding one!</p>
+          )}
         </div>
       </div>
     </div>
