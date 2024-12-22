@@ -8,10 +8,10 @@ const HomePage = () => {
   useEffect(() => {
     const fetchActivities = async () => {
       try {
-        const response = await axios.get("http://localhost:5001/api/activities"); // Replace with your backend URL
+        const response = await axios.get("http://localhost:5001/api/activities"); // Adjust backend URL as needed
         const updatedActivities = response.data.map((activity) => ({
           ...activity,
-          image: `http://localhost:5001/${activity.image}`, // Prepend backend URL to images
+          image: `http://localhost:5001/${activity.image}`, // Adjust image URL
         }));
         setActivities(updatedActivities);
       } catch (error) {
@@ -56,7 +56,6 @@ const HomePage = () => {
                 }}
               />
               <h2>{activity.name}</h2>
-              <p>{activity.description}</p>
               <a
                 href={activity.link}
                 target="_blank"
