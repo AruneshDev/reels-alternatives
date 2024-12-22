@@ -55,8 +55,8 @@ Follow these steps to set up and run the project locally.
 ```bash
 git clone https://github.com/your-username/reels-alternatives.git
 cd reels-alternatives
-
+```
 ### 2. Running the program
 ```bash
 npm start
-
+```
